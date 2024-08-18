@@ -1,18 +1,38 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    // Add your authentication logic here.
+    // If the authentication is successful, navigate to the dashboard.
+    // Example:
+    // if (isAuthenticated) {
+    //   navigate('/dashboard');
+    // } else {
+    //   // handle authentication failure
+    // }
+
+    // For demonstration, we'll navigate to the dashboard directly.
+    navigate('/dashboard');
+  };
+
   return (
-    <div>
+    <div
+      className="text-white h-[100vh] flex items-center justify-center bg-cover"
+      style={{ backgroundImage: "url('../src/Components/Assets/bg.jpg')" }}
+    >
       <div className="bg-slate-800 border border-slate-400 rounded-md p-9 shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-50 relative">
         <h1 className="text-4xl font-bold text-center mb-6">Login</h1>
-        <form action="">
+        <form onSubmit={handleSubmit}>
           <div className="relative my-4">
             <input
               type="text"
