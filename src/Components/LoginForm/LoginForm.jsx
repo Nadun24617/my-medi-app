@@ -1,29 +1,32 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
+import axios from 'axios'; // Ensure axios is imported
 
 const LoginForm = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost/myapp/login.php', formData);
+      alert(response.data.message || response.data.error);
+    } catch (error) {
+      alert('Error: ' + (error.response?.data?.message || error.message));
+    }
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Add your authentication logic here.
-    // If the authentication is successful, navigate to the dashboard.
-    // Example:
-    // if (isAuthenticated) {
-    //   navigate('/dashboard');
-    // } else {
-    //   // handle authentication failure
-    // }
-
-    // For demonstration, we'll navigate to the dashboard directly.
-    navigate('/dashboard');
   };
 
   return (
@@ -36,22 +39,26 @@ const LoginForm = () => {
         <form onSubmit={handleSubmit}>
           <div className="relative my-4">
             <input
-              type="text"
-              id="username"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=""
             />
             <label
-              htmlFor="username"
+              htmlFor="email"
               className="absolute text-sm duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] left-0 peer-focus:left-0 peer-focus:text-white peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
-              Username
+              Email
             </label>
           </div>
           <div className="relative my-4">
             <input
               type={showPassword ? "text" : "password"}
-              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=""
             />

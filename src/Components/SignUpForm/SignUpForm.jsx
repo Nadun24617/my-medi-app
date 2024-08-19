@@ -3,39 +3,38 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 
 function SignUpForm() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [number, setNumber] = useState('');
-  const [gender, setGender] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    number: '',
+    gender: '',
+    password: ''
+  });
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
+    if (formData.password !== confirmPassword) {
+      setError('Passwords do not match.');
       return;
     }
-  
-    const signup = { firstName, lastName, email, number, gender, password };
-  
+
     try {
-      const response = await axios.post('http://localhost:8081/medi-app/signup', signup, {
-        headers: { 'Content-Type': 'application/json' }
-      });
-      alert('Sign Up Successful: ' + response.data.message);
+      const response = await axios.post('http://localhost/myapp/signup.php', formData);
+      alert(response.data.message || response.data.error);
     } catch (error) {
-      console.error('Error details:', error.response ? error.response.data : error.message);
-      setError('Sign Up Failed: ' + (error.response?.data?.message || error.message));
+      setError('Error: ' + error.message);
     }
   };
-  
-  
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -58,9 +57,9 @@ function SignUpForm() {
             <div className="relative my-4">
               <input
                 type="text"
-                id="firstName"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                name="first_name"
+                value={formData.first_name}
+                onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=""
               />
@@ -74,9 +73,9 @@ function SignUpForm() {
             <div className="relative my-4">
               <input
                 type="text"
-                id="lastName"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=""
               />
@@ -90,9 +89,9 @@ function SignUpForm() {
             <div className="relative my-4">
               <input
                 type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=""
               />
@@ -106,9 +105,9 @@ function SignUpForm() {
             <div className="relative my-4">
               <input
                 type="tel"
-                id="number"
-                value={number}
-                onChange={(e) => setNumber(e.target.value)}
+                name="number"
+                value={formData.number}
+                onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=""
               />
@@ -121,9 +120,9 @@ function SignUpForm() {
             </div>
             <div className="relative my-4">
               <select
-                id="gender"
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               >
                 <option value="" disabled hidden></option>
@@ -141,9 +140,9 @@ function SignUpForm() {
             <div className="relative my-4">
               <input
                 type={showPassword ? "text" : "password"}
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=""
               />
