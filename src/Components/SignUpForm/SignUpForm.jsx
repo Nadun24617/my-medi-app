@@ -29,13 +29,16 @@ function SignUpForm() {
     }
 
     try {
-      const response = await axios.post('http://localhost/myapp/signup.php', formData);
+      const response = await axios.post('http://localhost/my-medi-app/src/php/signup.php', formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
       alert(response.data.message || response.data.error);
     } catch (error) {
       setError('Error: ' + error.message);
     }
   };
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -64,7 +67,7 @@ function SignUpForm() {
                 placeholder=""
               />
               <label
-                htmlFor="firstName"
+                htmlFor="first_name"
                 className="absolute text-sm duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] left-0 peer-focus:left-0 peer-focus:text-white peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
               >
                 First Name
@@ -80,7 +83,7 @@ function SignUpForm() {
                 placeholder=""
               />
               <label
-                htmlFor="lastName"
+                htmlFor="last_name"
                 className="absolute text-sm duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] left-0 peer-focus:left-0 peer-focus:text-white peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
               >
                 Last Name
@@ -125,7 +128,7 @@ function SignUpForm() {
                 onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               >
-                <option value="" disabled hidden></option>
+                <option value="" disabled hidden>Select Gender</option>
                 <option className="text-black" value="male">Male</option>
                 <option className="text-black" value="female">Female</option>
                 <option className="text-black" value="other">Other</option>

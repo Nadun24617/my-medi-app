@@ -18,7 +18,7 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost/myapp/login.php', formData);
+      const response = await axios.post('http://localhost/my-medi-app/src/php/login.php', formData);
       alert(response.data.message || response.data.error);
     } catch (error) {
       alert('Error: ' + (error.response?.data?.message || error.message));
