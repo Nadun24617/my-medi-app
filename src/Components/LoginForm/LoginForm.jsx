@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios'; // Ensure axios is imported
 
 const LoginForm = () => {
@@ -9,6 +8,7 @@ const LoginForm = () => {
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate(); // Hook to programmatically navigate
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,10 +18,19 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost/my-medi-app/src/php/login.php', formData);
-      alert(response.data.message || response.data.error);
+      const response = await axios.post('http://localhost/my-medi-app/src/php/login.php', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded' // Ensure this matches PHP expectations
+        }
+      });
+      if (response.data.message) {
+        // Redirect to the dashboard on successful login
+        navigate('/dashboard');
+      } else {
+        alert(response.data.error);
+      }
     } catch (error) {
-      alert('Error: ' + (error.response?.data?.message || error.message));
+      alert('Error: ' + (error.response?.data?.error || error.message));
     }
   };
 

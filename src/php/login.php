@@ -7,8 +7,14 @@ include 'db.php';
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    // Check if POST data is not empty
+    if (empty($_POST['email']) || empty($_POST['password'])) {
+        echo json_encode(["error" => "All fields are required."]);
+        exit();
+    }
+
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
 
     $sql = "SELECT * FROM users WHERE email = ?";
     $stmt = $conn->prepare($sql);
