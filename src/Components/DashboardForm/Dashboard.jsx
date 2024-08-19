@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DoctorAppointmentsCalendar from '../DoctorAppointmentsCalendar';
+import DailyMedications from '../DailyMedications'; // Import your Daily Medications component here
 
 export default function Dashboard() {
   // State to track the active component
@@ -9,6 +10,8 @@ export default function Dashboard() {
     switch (activeComponent) {
       case 'doctorAppointments':
         return <DoctorAppointmentsCalendar />; // Render the calendar component
+      case 'dailyMedications':
+        return <DailyMedications />; // Render the Daily Medications component
       // Add cases for other components if needed
       default:
         return <div>Welcome to your dashboard</div>;
@@ -48,13 +51,14 @@ export default function Dashboard() {
             />
           </svg>
         </button>
-        <h2 className="text-2xl font-bold mb-4">Menu</h2>
+        <h2 className="text-2xl font-bold mb-16">Medi-App</h2>
         <ul className="flex flex-col space-y-4">
+          
           <li>
             <a
-              href="#dashboard"
+              href="#daily-medications"
               className="flex items-center p-2 text-white rounded-lg hover:bg-gray-600 transition-colors group"
-              onClick={() => setActiveComponent('dashboard')}
+              onClick={() => setActiveComponent('dailyMedications')}
             >
               <svg
                 className="w-5 h-5 text-gray-300 group-hover:text-yellow-300"
@@ -66,7 +70,7 @@ export default function Dashboard() {
                 <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z" />
                 <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z" />
               </svg>
-              <span className="ms-3">Dashboard</span>
+              <span className="ms-3">Daily Medications</span>
             </a>
           </li>
           <li>
@@ -107,7 +111,7 @@ export default function Dashboard() {
           </li>
           <li>
             <a
-              href="#doctor-appointments"
+              href="#doctor-appointment-reminders"
               className="flex items-center p-2 text-white rounded-lg hover:bg-gray-600 transition-colors group"
               onClick={() => setActiveComponent('doctorAppointments')}
             >
@@ -118,42 +122,73 @@ export default function Dashboard() {
                 viewBox="0 0 18 18"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path d="M12.5 0a1 1 0 0 0-1 1v2h-1V1a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v2H3V1a1 1 0 0 0-1-1H1v16h2v-2h1v2h6v-2h1v2h2V1h-1v2h-1V1a1 1 0 0 0-1-1h-2Zm1 16v-2H7v2H6v-2H5v2H4v-2H3v2H2v2h16v-2h-1Z" />
+                <path d="M2 2v14h14V2H2Zm8 8h-2V8h2v2Z" />
               </svg>
               <span className="flex-1 ms-3">Doctor Appointment Reminders</span>
             </a>
           </li>
           <li>
-                  <a href="#exercise-tracking" className="flex items-center p-2 text-white rounded-lg hover:bg-gray-600 transition-colors group">
-                  <svg className="w-5 h-5 text-gray-300 group-hover:text-yellow-300" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M10 2a8 8 0 0 0 0 16v-6a2 2 0 1 1 4 0v6a8 8 0 0 0 0-16z"/>
-                  </svg>
-                  <span className="flex-1 ms-3">Exercise Tracking</span>
-                  </a>
-              </li>
-              <li>
-                  <a href="#health-summary" className="flex items-center p-2 text-white rounded-lg hover:bg-gray-600 transition-colors group">
-                  <svg className="w-5 h-5 text-gray-300 group-hover:text-yellow-300" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4 4h12v12H4V4Zm0-2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4Z"/>
-                  </svg>
-                  <span className="flex-1 ms-3">Daily Health Summary</span>
-                  </a>
-              </li>
-              <li>
-                  <a href="#progress-tracking" className="flex items-center p-2 text-white rounded-lg hover:bg-gray-600 transition-colors group">
-                  <svg className="w-5 h-5 text-gray-300 group-hover:text-yellow-300" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4 4h12v12H4V4Zm0-2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4Z"/>
-                  </svg>
-                  <span className="flex-1 ms-3">Progress Tracking</span>
-                  </a>
-              </li>
-              </ul>
-          </aside>
-          <div className=" text-black sm:ml-72 p-6">
+            <a
+              href="#exercise-tracking"
+              className="flex items-center p-2 text-white rounded-lg hover:bg-gray-600 transition-colors group"
+              onClick={() => setActiveComponent('exerciseTracking')}
+            >
+              <svg
+                className="w-5 h-5 text-gray-300 group-hover:text-yellow-300"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M16 8h-2V5a1 1 0 0 0-1-1H7V3H5v1H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3h2v-2h-2V8Zm-8 7V9h4v6H8Z" />
+              </svg>
+              <span className="flex-1 ms-3">Exercise Tracking</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#daily-health-summary"
+              className="flex items-center p-2 text-white rounded-lg hover:bg-gray-600 transition-colors group"
+              onClick={() => setActiveComponent('dailyHealthSummary')}
+            >
+              <svg
+                className="w-5 h-5 text-gray-300 group-hover:text-yellow-300"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M16 8h-2V5a1 1 0 0 0-1-1H7V3H5v1H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3h2v-2h-2V8Zm-8 7V9h4v6H8Z" />
+              </svg>
+              <span className="flex-1 ms-3">Daily Health Summary</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="#progress-tracking"
+              className="flex items-center p-2 text-white rounded-lg hover:bg-gray-600 transition-colors group"
+              onClick={() => setActiveComponent('progressTracking')}
+            >
+              <svg
+                className="w-5 h-5 text-gray-300 group-hover:text-yellow-300"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M16 8h-2V5a1 1 0 0 0-1-1H7V3H5v1H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3h2v-2h-2V8Zm-8 7V9h4v6H8Z" />
+              </svg>
+              <span className="flex-1 ms-3">Progress Tracking</span>
+            </a>
+          </li>
+        </ul>
+      </aside>
 
-            {renderComponent()}
-            </div>
-          </div>
-
+      {/* Main content */}
+      <main className="text-black p-6 ml-80">
+        {/* Render the active component */}
+        {renderComponent()}
+      </main>
+    </div>
   );
 }
