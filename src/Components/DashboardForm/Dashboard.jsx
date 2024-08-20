@@ -185,7 +185,7 @@ export default function Dashboard() {
       </aside>
 
       {/* Main content */}
-      <main className="text-black p-6 ml-80">
+      <main className="text-black p-6 ml-72">
         {/* Render the active component */}
         {renderComponent()}
       </main>
