@@ -3,40 +3,42 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 
 function SignUpForm() {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [number, setNumber] = useState('');
-  const [gender, setGender] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    number: '',
+    gender: '',
+    password: ''
+  });
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
+    if (formData.password !== confirmPassword) {
+      setError('Passwords do not match.');
       return;
     }
-  
-    const signup = { firstName, lastName, email, number, gender, password };
-  
+
     try {
-      const response = await axios.post('http://localhost:8081/medi-app/signup', signup, {
-        headers: { 'Content-Type': 'application/json' }
+      const response = await axios.post('http://localhost/my-medi-app/src/php/signup.php', formData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
-      alert('Sign Up Successful: ' + response.data.message);
+      alert(response.data.message || response.data.error);
     } catch (error) {
-      console.error('Error details:', error.response ? error.response.data : error.message);
-      setError('Sign Up Failed: ' + (error.response?.data?.message || error.message));
+      setError('Error: ' + error.message);
     }
   };
-  
-  
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -58,14 +60,14 @@ function SignUpForm() {
             <div className="relative my-4">
               <input
                 type="text"
-                id="firstName"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                name="first_name"
+                value={formData.first_name}
+                onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=""
               />
               <label
-                htmlFor="firstName"
+                htmlFor="first_name"
                 className="absolute text-sm duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] left-0 peer-focus:left-0 peer-focus:text-white peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
               >
                 First Name
@@ -74,14 +76,14 @@ function SignUpForm() {
             <div className="relative my-4">
               <input
                 type="text"
-                id="lastName"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=""
               />
               <label
-                htmlFor="lastName"
+                htmlFor="last_name"
                 className="absolute text-sm duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] left-0 peer-focus:left-0 peer-focus:text-white peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
               >
                 Last Name
@@ -90,9 +92,9 @@ function SignUpForm() {
             <div className="relative my-4">
               <input
                 type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=""
               />
@@ -106,9 +108,9 @@ function SignUpForm() {
             <div className="relative my-4">
               <input
                 type="tel"
-                id="number"
-                value={number}
-                onChange={(e) => setNumber(e.target.value)}
+                name="number"
+                value={formData.number}
+                onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=""
               />
@@ -121,12 +123,12 @@ function SignUpForm() {
             </div>
             <div className="relative my-4">
               <select
-                id="gender"
-                value={gender}
-                onChange={(e) => setGender(e.target.value)}
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               >
-                <option value="" disabled hidden></option>
+                <option value="" disabled hidden>Select Gender</option>
                 <option className="text-black" value="male">Male</option>
                 <option className="text-black" value="female">Female</option>
                 <option className="text-black" value="other">Other</option>
@@ -141,9 +143,9 @@ function SignUpForm() {
             <div className="relative my-4">
               <input
                 type={showPassword ? "text" : "password"}
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=""
               />

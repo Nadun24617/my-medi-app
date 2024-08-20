@@ -5,7 +5,6 @@ import SignUpForm from './Components/SignUpForm/SignUpForm';
 import Dashboard from './Components/DashboardForm/Dashboard';
 import DoctorAppointmentsCalendar from './Components/DoctorAppointmentsCalendar';
 
-
 function App() {
   return (
     <div className="h-[100vh]">
