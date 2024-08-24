@@ -2,27 +2,30 @@ import { useState } from 'react';
 
 function DailyMedications() {
   const [tasks, setTasks] = useState([
-    { id: 1, name: 'Morning Medicine', time: '08:00', date: '2024-08-19' },
+    { id: 1, name: 'Morning Medicine', time: '08:00', date: '2024-08-19', note: '' },
     // Add initial tasks if needed
   ]);
 
   const [newTask, setNewTask] = useState('');
   const [newTime, setNewTime] = useState('');
   const [newDate, setNewDate] = useState('');
+  const [newNote, setNewNote] = useState('');
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [editingTaskName, setEditingTaskName] = useState('');
   const [editingTaskTime, setEditingTaskTime] = useState('');
   const [editingTaskDate, setEditingTaskDate] = useState('');
+  const [editingTaskNote, setEditingTaskNote] = useState('');
 
   const addTask = () => {
     if (newTask.trim() && newTime && newDate) {
       setTasks([
         ...tasks,
-        { id: tasks.length + 1, name: newTask, time: newTime, date: newDate },
+        { id: tasks.length + 1, name: newTask, time: newTime, date: newDate, note: newNote },
       ]);
       setNewTask('');
       setNewTime('');
       setNewDate('');
+      setNewNote('');
     }
   };
 
@@ -30,18 +33,19 @@ function DailyMedications() {
     setTasks(tasks.filter((task) => task.id !== taskId));
   };
 
-  const startEditing = (taskId, currentName, currentTime, currentDate) => {
+  const startEditing = (taskId, currentName, currentTime, currentDate, currentNote) => {
     setEditingTaskId(taskId);
     setEditingTaskName(currentName);
     setEditingTaskTime(currentTime);
     setEditingTaskDate(currentDate);
+    setEditingTaskNote(currentNote);
   };
 
   const saveEdit = () => {
     setTasks(
       tasks.map((task) =>
         task.id === editingTaskId
-          ? { ...task, name: editingTaskName, time: editingTaskTime, date: editingTaskDate }
+          ? { ...task, name: editingTaskName, time: editingTaskTime, date: editingTaskDate, note: editingTaskNote }
           : task
       )
     );
@@ -49,6 +53,7 @@ function DailyMedications() {
     setEditingTaskName('');
     setEditingTaskTime('');
     setEditingTaskDate('');
+    setEditingTaskNote('');
   };
 
   return (
@@ -77,6 +82,12 @@ function DailyMedications() {
                   onChange={(e) => setEditingTaskDate(e.target.value)}
                   className="p-2 mb-2 border border-gray-300 rounded"
                 />
+                <textarea
+                  value={editingTaskNote}
+                  onChange={(e) => setEditingTaskNote(e.target.value)}
+                  placeholder="Add a note"
+                  className="p-2 border border-gray-300 rounded"
+                />
               </div>
             ) : (
               <div>
@@ -84,6 +95,7 @@ function DailyMedications() {
                 <div className="text-sm text-gray-500">
                   {task.time} on {task.date}
                 </div>
+                {task.note && <div className="text-sm text-gray-700 mt-1">Note: {task.note}</div>}
               </div>
             )}
 
@@ -94,7 +106,7 @@ function DailyMedications() {
                 </button>
               ) : (
                 <button
-                  onClick={() => startEditing(task.id, task.name, task.time, task.date)}
+                  onClick={() => startEditing(task.id, task.name, task.time, task.date, task.note)}
                   className="text-blue-500 ml-2"
                 >
                   Edit
@@ -125,6 +137,12 @@ function DailyMedications() {
           type="date"
           value={newDate}
           onChange={(e) => setNewDate(e.target.value)}
+          className="p-2 mb-2 border border-gray-300 rounded w-full"
+        />
+        <textarea
+          value={newNote}
+          onChange={(e) => setNewNote(e.target.value)}
+          placeholder="Add a note"
           className="p-2 mb-2 border border-gray-300 rounded w-full"
         />
         <button onClick={addTask} className="p-2 bg-blue-500 text-white rounded w-full">
