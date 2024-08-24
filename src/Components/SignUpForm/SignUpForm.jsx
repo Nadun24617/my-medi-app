@@ -34,10 +34,13 @@ function SignUpForm() {
           'Content-Type': 'application/json'
         }
       });
+
+      
       alert(response.data.message || response.data.error);
     } catch (error) {
       setError('Error: ' + error.message);
     }
+    
   };
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -46,6 +49,7 @@ function SignUpForm() {
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
+  
 
   return (
     <div
