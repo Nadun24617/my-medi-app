@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 function DailyMedications() {
   const [tasks, setTasks] = useState([
-    { id: 1, name: 'Morning Medicine', time: '08:00', date: '2024-08-19', note: '' },
+    
     // Add initial tasks if needed
   ]);
 
