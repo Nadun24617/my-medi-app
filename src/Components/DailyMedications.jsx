@@ -22,10 +22,18 @@ function DailyMedications() {
         ...tasks,
         { id: tasks.length + 1, name: newTask, time: newTime, date: newDate, note: newNote },
       ]);
-      setNewTask('');
-      setNewTime('');
-      setNewDate('');
-      setNewNote('');
+      fetch('DailyMedications.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newTask, time: newTime, date: newDate, note: newNote })
+      })
+      .then(response => response.json())
+      .then(newTask => setTasks([...tasks, newTask]));
+      
+      setNewTask('tasks');
+      setNewTime('newTask');
+      setNewDate('newDate');
+      setNewNote('newNote');
     }
   };
 
