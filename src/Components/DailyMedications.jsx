@@ -16,6 +16,7 @@ function DailyMedications() {
   const [editingTaskDate, setEditingTaskDate] = useState('');
   const [editingTaskNote, setEditingTaskNote] = useState('');
 
+  // Add a new task
   const addTask = () => {
     if (newTask.trim() && newTime && newDate) {
       fetch('http://localhost/my-medi-app/src/php/dailymedications.php', {
@@ -34,10 +35,18 @@ function DailyMedications() {
     }
   };
 
+  // Remove a task
   const removeTask = (taskId) => {
-    setTasks(tasks.filter((task) => task.id !== taskId));
+    fetch(`http://localhost/my-medi-app/src/php/dailymedications.php`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: taskId })
+    })
+    .then(() => setTasks(tasks.filter((task) => task.id !== taskId)))
+    .catch(error => console.error('Error:', error));
   };
 
+  // Start editing a task
   const startEditing = (taskId, currentName, currentTime, currentDate, currentNote) => {
     setEditingTaskId(taskId);
     setEditingTaskName(currentName);
@@ -46,14 +55,29 @@ function DailyMedications() {
     setEditingTaskNote(currentNote);
   };
 
+  // Save the edited task
   const saveEdit = () => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === editingTaskId
-          ? { ...task, name: editingTaskName, time: editingTaskTime, date: editingTaskDate, note: editingTaskNote }
-          : task
-      )
-    );
+    fetch(`http://localhost/my-medi-app/src/php/dailymedications.php`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: editingTaskId,
+        name: editingTaskName,
+        time: editingTaskTime,
+        date: editingTaskDate,
+        note: editingTaskNote
+      })
+    })
+    .then(response => response.json())
+    .then(updatedTask => {
+      setTasks(
+        tasks.map((task) =>
+          task.id === editingTaskId ? updatedTask : task
+        )
+      );
+    })
+    .catch(error => console.error('Error:', error));
+
     setEditingTaskId(null);
     setEditingTaskName('');
     setEditingTaskTime('');
