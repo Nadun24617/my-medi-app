@@ -18,7 +18,7 @@ function DailyMedications() {
 
   const addTask = () => {
     if (newTask.trim() && newTime && newDate) {
-      fetch('http://localhost/my-medi-app/src/php/DailyMedications.php', {
+      fetch('http://localhost/my-medi-app/src/php/dailymedications.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newTask, time: newTime, date: newDate, note: newNote })
