@@ -66,6 +66,7 @@ switch ($method) {
         $time = $data['time'];
         $date = $data['date'];
         $note = $data['note'];
+        
 
         $stmt = $conn->prepare("UPDATE tasks SET name=?, time=?, date=?, note=? WHERE id=?");
         $stmt->bind_param("ssssi", $name, $time, $date, $note, $id);

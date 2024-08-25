@@ -77,6 +77,7 @@ const DoctorAppointmentsCalendar = () => {
     setNewTime(currentTime);
     setNewDate(currentDate);
     setNewLocation(currentLocation);
+    
   };
 
   const saveEdit = async () => {
