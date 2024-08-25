@@ -30,6 +30,11 @@ switch ($method) {
 
     case 'POST':
         $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data || empty($data['name']) || empty($data['time']) || empty($data['date'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid input']);
+            exit;
+        }
         $name = $data['name'];
         $time = $data['time'];
         $date = $data['date'];
@@ -47,6 +52,11 @@ switch ($method) {
 
     case 'PUT':
         $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data || empty($data['id']) || empty($data['name']) || empty($data['time']) || empty($data['date'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid input']);
+            exit;
+        }
         $id = $data['id'];
         $name = $data['name'];
         $time = $data['time'];
@@ -64,6 +74,11 @@ switch ($method) {
 
     case 'DELETE':
         $data = json_decode(file_get_contents('php://input'), true);
+        if (!$data || empty($data['id'])) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid input']);
+            exit;
+        }
         $id = $data['id'];
 
         $stmt = $conn->prepare("DELETE FROM tasks WHERE id=?");

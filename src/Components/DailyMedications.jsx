@@ -18,22 +18,19 @@ function DailyMedications() {
 
   const addTask = () => {
     if (newTask.trim() && newTime && newDate) {
-      setTasks([
-        ...tasks,
-        { id: tasks.length + 1, name: newTask, time: newTime, date: newDate, note: newNote },
-      ]);
-      fetch('DailyMedications.php', {
+      fetch('http://localhost/my-medi-app/src/php/DailyMedications.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newTask, time: newTime, date: newDate, note: newNote })
       })
       .then(response => response.json())
-      .then(newTask => setTasks([...tasks, newTask]));
+      .then(newTask => setTasks([...tasks, newTask]))
+      .catch(error => console.error('Error:', error));
       
-      setNewTask('tasks');
-      setNewTime('newTask');
-      setNewDate('newDate');
-      setNewNote('newNote');
+      setNewTask('');
+      setNewTime('');
+      setNewDate('');
+      setNewNote('');
     }
   };
 
