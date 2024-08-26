@@ -163,24 +163,7 @@ export default function Dashboard() {
               <span className="flex-1 ms-3">Daily Health Summary</span>
             </a>
           </li>
-          <li>
-            <a
-              href="#progress-tracking"
-              className="flex items-center p-2 text-white rounded-lg hover:bg-gray-600 transition-colors group"
-              onClick={() => setActiveComponent('progressTracking')}
-            >
-              <svg
-                className="w-5 h-5 text-gray-300 group-hover:text-yellow-300"
-                aria-hidden="true"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M16 8h-2V5a1 1 0 0 0-1-1H7V3H5v1H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3h2v-2h-2V8Zm-8 7V9h4v6H8Z" />
-              </svg>
-              <span className="flex-1 ms-3">Progress Tracking</span>
-            </a>
-          </li>
+          
         </ul>
       </aside>
 
