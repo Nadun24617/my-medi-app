@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
@@ -11,64 +12,48 @@ const DoctorAppointmentsCalendar = () => {
   const [editingAppointmentId, setEditingAppointmentId] = useState(null);
   const [appointments, setAppointments] = useState({});
 
+  // Fetch all appointments from the backend
   useEffect(() => {
-    fetchAppointments();
+    axios.get('http://localhost/my-medi-app/src/php/doctorappoint.php')
+      .then(response => {
+        const appointments = response.data.reduce((acc, appointment) => {
+          const date = appointment.date;
+          if (!acc[date]) acc[date] = [];
+          acc[date].push(appointment);
+          return acc;
+        }, {});
+        setAppointments(appointments);
+      })
+      .catch(error => console.error('Error fetching appointments:', error));
   }, []);
-
-  const fetchAppointments = async () => {
-    try {
-      const response = await fetch('http://localhost/my-medi-app/src/php/doctorappoint.php');
-      const data = await response.json();
-      const formattedData = data.reduce((acc, appointment) => {
-        const date = appointment.date;
-        if (!acc[date]) acc[date] = [];
-        acc[date].push(appointment);
-        return acc;
-      }, {});
-      setAppointments(formattedData);
-    } catch (error) {
-      console.error('Error fetching appointments:', error);
-    }
-  };
 
   const handleDateChange = (date) => {
     setDate(date);
     setNewDate(date.toISOString().split('T')[0]); // Format date to 'YYYY-MM-DD'
   };
 
-  const addAppointment = async () => {
-    
-    try {
-      const newAppointment = {
-        name: newName,
-        time: newTime,
-        date: newDate,
-        location: newLocation,
-        image: 'https://randomuser.me/api/portraits/men/3.jpg', // Replace with actual image or placeholder
-      };
+  const addAppointment = () => {
+    const newAppointment = {
+      name: newName,
+      time: newTime,
+      date: newDate,
+      location: newLocation,
+      image: 'https://randomuser.me/api/portraits/men/3.jpg', // Replace with actual image or placeholder
+    };
 
-      const response = await fetch('http://localhost/my-medi-app/src/php/doctorappoint.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newAppointment),
-      });
-
-      const addedAppointment = await response.json();
-
-      setAppointments({
-        ...appointments,
-        [newDate]: [...(appointments[newDate] || []), addedAppointment],
-      });
-
-      setNewName('');
-      setNewTime('');
-      setNewDate('');
-      setNewLocation('');
-    } catch (error) {
-      console.error('Error adding appointment:', error);
-    }
+    axios.post('http://localhost/my-medi-app/src/php/doctorappoint.php', newAppointment)
+      .then(response => {
+        const addedAppointment = response.data;
+        setAppointments({
+          ...appointments,
+          [newDate]: [...(appointments[newDate] || []), addedAppointment],
+        });
+        setNewName('');
+        setNewTime('');
+        setNewDate('');
+        setNewLocation('');
+      })
+      .catch(error => console.error('Error adding appointment:', error));
   };
 
   const startEditing = (appointmentId, currentName, currentTime, currentDate, currentLocation) => {
@@ -77,62 +62,46 @@ const DoctorAppointmentsCalendar = () => {
     setNewTime(currentTime);
     setNewDate(currentDate);
     setNewLocation(currentLocation);
-    
   };
 
-  const saveEdit = async () => {
-    try {
-      const updatedAppointment = {
-        id: editingAppointmentId,
-        name: newName,
-        time: newTime,
-        date: newDate,
-        location: newLocation,
-        image: 'https://randomuser.me/api/portraits/men/3.jpg', // Replace with actual image or placeholder
-      };
+  const saveEdit = () => {
+    const updatedAppointment = {
+      id: editingAppointmentId,
+      name: newName,
+      time: newTime,
+      date: newDate,
+      location: newLocation,
+      image: 'https://randomuser.me/api/portraits/men/3.jpg', // Keep the existing image or update if necessary
+    };
 
-      await fetch('http://localhost/my-medi-app/src/php/doctorappoint.php', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedAppointment),
-      });
-
-      setAppointments({
-        ...appointments,
-        [newDate]: appointments[newDate].map((appointment) =>
-          appointment.id === editingAppointmentId
-            ? updatedAppointment
-            : appointment
-        ),
-      });
-
-      setEditingAppointmentId(null);
-      setNewName('');
-      setNewTime('');
-      setNewDate('');
-      setNewLocation('');
-    } catch (error) {
-      console.error('Error saving appointment edit:', error);
-    }
+    axios.put('http://localhost/my-medi-app/src/php/doctorappoint.php', updatedAppointment)
+      .then(response => {
+        setAppointments({
+          ...appointments,
+          [newDate]: appointments[newDate].map(appointment =>
+            appointment.id === editingAppointmentId ? response.data : appointment
+          ),
+        });
+        setEditingAppointmentId(null);
+        setNewName('');
+        setNewTime('');
+        setNewDate('');
+        setNewLocation('');
+      })
+      .catch(error => console.error('Error updating appointment:', error));
   };
 
-  const deleteAppointment = async (appointmentId, appointmentDate) => {
-    try {
-      await fetch(`http://localhost/my-medi-app/src/php/doctorappoint.php?id=${appointmentId}`, {
-        method: 'DELETE',
-      });
-
-      setAppointments({
-        ...appointments,
-        [appointmentDate]: appointments[appointmentDate].filter(
-          (appointment) => appointment.id !== appointmentId
-        ),
-      });
-    } catch (error) {
-      console.error('Error deleting appointment:', error);
-    }
+  const deleteAppointment = (appointmentId, appointmentDate) => {
+    axios.delete(`http://localhost/my-medi-app/src/php/doctorappoint.php?id=${appointmentId}`)
+      .then(() => {
+        setAppointments({
+          ...appointments,
+          [appointmentDate]: appointments[appointmentDate].filter(
+            (appointment) => appointment.id !== appointmentId
+          ),
+        });
+      })
+      .catch(error => console.error('Error deleting appointment:', error));
   };
 
   return (
