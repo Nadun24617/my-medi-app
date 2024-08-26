@@ -3,12 +3,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
 
-$host = 'localhost';
-$user = 'root';
-$pass = '';
-$dbname = 'myapp';
-
-$conn = new mysqli($host, $user, $pass, $dbname);
+include 'db.php';
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -17,6 +12,7 @@ if ($conn->connect_error) {
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
+
 
 switch ($method) {
     case 'GET':
@@ -95,6 +91,8 @@ switch ($method) {
         $stmt->close();
         break;
 }
+
+
 
 $conn->close();
 ?>

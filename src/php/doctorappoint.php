@@ -73,6 +73,32 @@ function deleteAppointment($pdo, $id) {
     echo json_encode(['success' => true]);
 }
 
+function getAppointmentById($id) {
+    
+    // Check the connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Initialize an array to store the appointment data
+    $appointmentData = [];
+
+    // SQL query to select all data from the appointments table where id matches
+    $sql = "SELECT * FROM appointments WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id); // Bind the $id parameter to the query
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Check if the query returned any result and fetch the data
+    if ($result->num_rows > 0) {
+        $appointmentData = $result->fetch_assoc();
+    }
+
+    // Return the appointment data as an associative array
+    return $appointmentData;
+}
+
 function getAppointments($pdo) {
     $sql = "SELECT * FROM appointments";
     $stmt = $pdo->query($sql);
