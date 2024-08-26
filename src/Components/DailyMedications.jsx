@@ -3,7 +3,6 @@ import { useState } from 'react';
 function DailyMedications() {
   const [tasks, setTasks] = useState([
     
-    // Add initial tasks if needed
   ]);
 
   const [newTask, setNewTask] = useState('');
