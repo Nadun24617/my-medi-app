@@ -148,7 +148,6 @@ export default function Dashboard() {
               <span className="flex-1 ms-3">Daily Health Summary</span>
             </a>
           </li>
-<<<<<<< HEAD
           <li>
             <a
               href="#progress-tracking"
@@ -190,10 +189,6 @@ export default function Dashboard() {
           </button>
         
        </ul>
-=======
-          
-        </ul>
->>>>>>> d590f6e48815848a2b388cd93e4e8cf317dcd8ff
       </aside>
 
       {/* Main content */}
