@@ -201,7 +201,7 @@ function SignUpForm() {
             <div className="mt-4 text-center">
               <p className="text-sm text-white">
                 Already have an account?{" "}
-                <Link to="/" className="font-bold duration-300 text-white hover:text-yellow-300">
+                <Link to="/login" className="font-bold duration-300 text-white hover:text-yellow-300">
                   Login
                 </Link>
               </p>
